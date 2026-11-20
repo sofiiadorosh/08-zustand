@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { fetchNoteById } from '@/lib/api';
-import { truncate } from '@/lib/seo';
+import { OG_IMAGE, SITE_NAME, truncate } from '@/lib/seo';
 import NoteDetailsClient from './NoteDetails.client';
 import css from './NoteDetails.module.css';
 
@@ -17,14 +17,24 @@ export async function generateMetadata({
   params,
 }: NoteDetailsPageProps): Promise<Metadata> {
   const { id } = await params;
+  const url = `/notes/${id}`;
 
   try {
     const note = await fetchNoteById(id);
+    const description = truncate(note.content || `Note tagged ${note.tag}`);
 
     return {
       title: note.title,
-      description: truncate(note.content || `Note tagged ${note.tag}`),
-      alternates: { canonical: `/notes/${id}` },
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        title: `${note.title} | ${SITE_NAME}`,
+        description,
+        url,
+        siteName: SITE_NAME,
+        images: [OG_IMAGE],
+        type: 'article',
+      },
     };
   } catch {
     return {

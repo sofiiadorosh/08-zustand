@@ -1,9 +1,22 @@
 import type { Metadata } from 'next';
+import { OG_IMAGE, SITE_NAME } from '@/lib/seo';
 import css from './page.module.css';
 
+const TITLE = 'Page not found';
+const DESCRIPTION =
+  'Sorry, the page you are looking for does not exist in NoteHub.';
+
 export const metadata: Metadata = {
-  title: 'Page not found',
-  description: 'Sorry, the page you are looking for does not exist.',
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: `${TITLE} | ${SITE_NAME}`,
+    description: DESCRIPTION,
+    url: '/404',
+    siteName: SITE_NAME,
+    images: [OG_IMAGE],
+    type: 'website',
+  },
 };
 
 function NotFound() {

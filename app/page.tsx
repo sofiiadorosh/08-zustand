@@ -1,12 +1,23 @@
 import type { Metadata } from 'next';
-import { SITE_NAME } from '@/lib/seo';
+import { OG_IMAGE, SITE_NAME } from '@/lib/seo';
 import css from './page.module.css';
 
+const TITLE = `${SITE_NAME} — Personal notes in one place`;
+const DESCRIPTION =
+  'Write, edit, search and organize your personal notes with NoteHub — a clean and productive notes app.';
+
 export const metadata: Metadata = {
-  title: { absolute: `${SITE_NAME} — Personal notes in one place` },
-  description:
-    'Write, edit, search and organize your personal notes with NoteHub — a clean and productive notes app.',
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: { canonical: '/' },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: '/',
+    siteName: SITE_NAME,
+    images: [OG_IMAGE],
+    type: 'website',
+  },
 };
 
 function Home() {

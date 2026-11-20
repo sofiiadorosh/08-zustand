@@ -6,6 +6,7 @@ import {
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchNotes } from '@/lib/api';
+import { OG_IMAGE, SITE_NAME } from '@/lib/seo';
 import { NOTE_TAGS, type NoteTag } from '@/types/note';
 import NotesClient from './Notes.client';
 
@@ -29,12 +30,24 @@ export async function generateMetadata({
     };
   }
 
+  const title = isAllNotes ? 'All notes' : `${filter} notes`;
+  const description = isAllNotes
+    ? 'Browse, search and manage all of your notes in NoteHub.'
+    : `Browse, search and manage your notes tagged "${filter}" in NoteHub.`;
+  const url = `/notes/filter/${filter}`;
+
   return {
-    title: isAllNotes ? 'All notes' : `${filter} notes`,
-    description: isAllNotes
-      ? 'Browse, search and manage all of your notes in NoteHub.'
-      : `Browse, search and manage your notes tagged "${filter}" in NoteHub.`,
-    alternates: { canonical: `/notes/filter/${filter}` },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      siteName: SITE_NAME,
+      images: [OG_IMAGE],
+      type: 'website',
+    },
   };
 }
 

@@ -5,7 +5,7 @@ import './globals.css';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/seo';
+import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -15,6 +15,14 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: '/',
+    siteName: SITE_NAME,
+    images: [OG_IMAGE],
+    type: 'website',
+  },
 };
 
 interface RootLayoutProps {
