@@ -2,6 +2,8 @@
 
 NoteHub is a simple app for creating, browsing and searching personal notes. It is built with the Next.js App Router and uses the public NoteHub API.
 
+**Live demo:** [08-zustand-three-liard.vercel.app](https://08-zustand-three-liard.vercel.app/)
+
 This project is homework 08 of the GoIT React course. It builds on `07-routing-nextjs` and adds SEO metadata, the Roboto font, a separate page for creating notes, and a note draft that is saved with Zustand.
 
 ## Features
