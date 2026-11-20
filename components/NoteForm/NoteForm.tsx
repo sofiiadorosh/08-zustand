@@ -1,30 +1,41 @@
 'use client';
 
-import { useId } from 'react';
+import { type ChangeEvent, useEffect, useId } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote } from '@/lib/api';
+import { useNoteDraftStore } from '@/lib/store/noteStore';
 import { NOTE_TAGS, type NewNote, type NoteTag } from '@/types/note';
 import css from './NoteForm.module.css';
 
-const initialValues: NewNote = {
-  title: '',
-  content: '',
-  tag: 'Todo',
-};
+type FieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 function NoteForm() {
   const fieldId = useId();
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const draft = useNoteDraftStore((state) => state.draft);
+  const setDraft = useNoteDraftStore((state) => state.setDraft);
+  const clearDraft = useNoteDraftStore((state) => state.clearDraft);
+
+  useEffect(() => {
+    useNoteDraftStore.persist.rehydrate();
+  }, []);
+
   const createNoteMutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
-      router.push('/notes/filter/all');
+      clearDraft();
+      router.back();
     },
   });
+
+  const handleChange = (event: ChangeEvent<FieldElement>) => {
+    const { name, value } = event.target;
+    setDraft({ [name]: value });
+  };
 
   const handleSubmit = (formData: FormData) => {
     const note: NewNote = {
@@ -49,7 +60,8 @@ function NoteForm() {
           type="text"
           name="title"
           className={css.input}
-          defaultValue={initialValues.title}
+          value={draft.title}
+          onChange={handleChange}
           required
           minLength={3}
           maxLength={50}
@@ -63,7 +75,8 @@ function NoteForm() {
           name="content"
           rows={8}
           className={css.textarea}
-          defaultValue={initialValues.content}
+          value={draft.content}
+          onChange={handleChange}
           maxLength={500}
         />
       </div>
@@ -74,7 +87,8 @@ function NoteForm() {
           id={`${fieldId}-tag`}
           name="tag"
           className={css.select}
-          defaultValue={initialValues.tag}
+          value={draft.tag}
+          onChange={handleChange}
           required
         >
           {NOTE_TAGS.map((tag) => (
