@@ -7,13 +7,12 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { useState } from 'react';
-import { createNote, deleteNote, fetchNotes } from '@/lib/api';
+import Link from 'next/link';
+import { deleteNote, fetchNotes } from '@/lib/api';
 import { useDebouncedCallback } from 'use-debounce';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import EmptyMessage from '@/components/EmptyMessage/EmptyMessage';
 import css from './NotesPage.module.css';
 import { type NoteTag } from '@/types/note';
@@ -26,7 +25,6 @@ function NotesClient({ tag }: NotesClientProps) {
   const queryClient = useQueryClient();
   const [query, setQuery] = useState('');
   const [selectedPage, setSelectedPage] = useState(1);
-  const [isModalOpened, setModalOpened] = useState(false);
 
   const { data, isSuccess } = useQuery({
     queryKey: ['notes', query, selectedPage, tag],
@@ -34,14 +32,6 @@ function NotesClient({ tag }: NotesClientProps) {
     placeholderData: keepPreviousData,
     refetchOnMount: false,
     throwOnError: true,
-  });
-
-  const createNoteMutation = useMutation({
-    mutationFn: createNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      handleModalClose();
-    },
   });
 
   const deleteNoteMutation = useMutation({
@@ -53,14 +43,6 @@ function NotesClient({ tag }: NotesClientProps) {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
   });
-
-  const handleModalOpen = () => {
-    setModalOpened(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpened(false);
-  };
 
   const handleSearchNotes = useDebouncedCallback((query: string) => {
     setQuery(query);
@@ -78,9 +60,9 @@ function NotesClient({ tag }: NotesClientProps) {
             onPageChange={setSelectedPage}
           />
         )}
-        <button className={css.button} type="button" onClick={handleModalOpen}>
+        <Link className={css.button} href="/notes/action/create">
           Create note +
-        </button>
+        </Link>
       </header>
       {isSuccess && data.notes.length === 0 && <EmptyMessage query={query} />}
       {isSuccess && data.notes.length > 0 && (
@@ -89,15 +71,6 @@ function NotesClient({ tag }: NotesClientProps) {
           onDelete={deleteNoteMutation.mutate}
           isDeleting={deleteNoteMutation.isPending}
         />
-      )}
-      {isModalOpened && (
-        <Modal onClose={handleModalClose}>
-          <NoteForm
-            onCancel={handleModalClose}
-            onSubmit={createNoteMutation.mutate}
-            isSubmitting={createNoteMutation.isPending}
-          />
-        </Modal>
       )}
     </div>
   );
