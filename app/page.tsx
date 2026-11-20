@@ -1,4 +1,13 @@
+import type { Metadata } from 'next';
+import { SITE_NAME } from '@/lib/seo';
 import css from './page.module.css';
+
+export const metadata: Metadata = {
+  title: { absolute: `${SITE_NAME} — Personal notes in one place` },
+  description:
+    'Write, edit, search and organize your personal notes with NoteHub — a clean and productive notes app.',
+  alternates: { canonical: '/' },
+};
 
 function Home() {
   return (
