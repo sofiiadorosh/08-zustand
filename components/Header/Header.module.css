@@ -1,0 +1,37 @@
+.header {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #333333;
+}
+
+.header a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.header a:hover {
+  color: #dddddd;
+}
+
+.navigation {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.navigation li a {
+  font-size: 1rem;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.navigation li a:hover {
+  color: #dddddd;
+}

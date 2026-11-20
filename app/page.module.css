@@ -1,0 +1,30 @@
+.main {
+  flex: 1;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 16px;
+  width: 90%;
+  max-width: 1280px;
+}
+
+.title {
+  margin-bottom: 60px;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.description {
+  margin-bottom: 16px;
+  font-size: 18px;
+  line-height: 28px;
+  color: #444444;
+}
+
+.main {
+  flex: 1;
+  text-align: center;
+}
